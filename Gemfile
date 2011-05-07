@@ -6,6 +6,8 @@ gem 'SystemTimer'
 gem "mongo_mapper"
 gem 'httparty'
 gem 'nokogiri'
+gem 'progress_bar'
+
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 

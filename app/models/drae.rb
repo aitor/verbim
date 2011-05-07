@@ -47,16 +47,13 @@ module Drae
 
     def perform_request(params)
       key = API.path + params.collect {|k,v| "#{k}=#{v}" }*"&"
-      key = Digest::SHA256.hexdigest(key)
-      if File.exists?("#{key}.html")
-        @response = File.read("#{key}.html")
-      else
-        @response = self.class.get(API.path, :query => params)
-        File.open("#{key}.html", "w") do |f|
-          f << @response
-        end
+      
+      w = Word.find_by_name(params['LEMA'])
+      if w.blank?
+        html = self.class.get(API.path, :query => params)
+        w = Word.create(:name=>params['LEMA'], :html => html)
       end
-      @response
+      @response = w.html
     end
 
     def parse_response(response)
@@ -91,12 +88,11 @@ module Drae
     #<span class="eEtimo">, <a>este del</a> <a>turco</a> <i>çakal</i></span>
     #<span class="eEtimo">, <a>este del</a> <a>persa</a> <i>šaḡal,</i></span>
     #<span class="eEtimo"> y este <a>del</a> <a title="sánscrito o sánscrita">sánscr.</a> <i>sṛgâlá</i>).</span>
-    # pero tambien
-    #<span class="eEtimo">(<a title="del participio de">Del part. de</a> <i>dar</i></span>
     def process_etymology(etymology)
       returning [] do |sources|
         etymology.search(".eEtimo").each do |etimo| 
-          lang = etimo.search("a").last
+          #puts etimo
+          lang = etimo.search("a")[1]
           sources << {:lang => lang['title'] ? lang['title'] : lang.text, :word => etimo.search("i").first.text}
         end
       end
