@@ -91,11 +91,12 @@ module Drae
     #<span class="eEtimo">, <a>este del</a> <a>turco</a> <i>çakal</i></span>
     #<span class="eEtimo">, <a>este del</a> <a>persa</a> <i>šaḡal,</i></span>
     #<span class="eEtimo"> y este <a>del</a> <a title="sánscrito o sánscrita">sánscr.</a> <i>sṛgâlá</i>).</span>
+    # pero tambien
+    #<span class="eEtimo">(<a title="del participio de">Del part. de</a> <i>dar</i></span>
     def process_etymology(etymology)
       returning [] do |sources|
         etymology.search(".eEtimo").each do |etimo| 
-          puts etimo
-          lang = etimo.search("a")[1]
+          lang = etimo.search("a").last
           sources << {:lang => lang['title'] ? lang['title'] : lang.text, :word => etimo.search("i").first.text}
         end
       end
