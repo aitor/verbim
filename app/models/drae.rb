@@ -78,7 +78,7 @@ module Drae
         :id        => (div/:a).attribute("name").value.to_i,
         :word      => div.search(".eLema").first.text,
         :etymology => {
-                        :original =>etymology.text.gsub(%r{</?[^>]+?>}, '')[2..-3], 
+                        :original =>etymology.text.strip.gsub(%r{</?[^>]+?>}, '')[1..-3], 
                         :sources => process_etymology(etymology)
                       },
         :meanings  => process_meanings(meanings),
@@ -94,18 +94,23 @@ module Drae
     def process_etymology(etymology)
       returning [] do |sources|
         etymology.search(".eEtimo").each do |etimo| 
+          puts etimo
           lang = etimo.search("a")[1]
           sources << {:lang => lang['title'] ? lang['title'] : lang.text, :word => etimo.search("i").first.text}
         end
       end
     end
+
     #<a name="0_1"></a>
     #<span class="eOrdenAcepLema"><b> 1.     </b></span>
     #<span class="eAbrv"> <span class="eAbrv" title="nombre masculino">m.</span></span>
     #<span class="eAcep"> Mamífero carnívoro de la familia de los Cánidos, de un [...] </span>
+    #
+    # check this... OH MY FUCKING GOD:
+    # <span class="eAbrvNoEdit"><span class="eAbrvNoEdit" title="nombre femenino">f.</span></span>
     def process_meanings(meanings)
       meanings.collect do |meaning|
-        abbr = meaning.search(".eAbrv").first || meaning.search(".eAbrvNoEdit").first
+        abbr = meaning.search(".eAbrv .eAbrv").first || meaning.search(".eAbrvNoEdit .eAbrvNoEdit").first
         { 
           :order   => meaning.search(".eOrdenAcepLema").text.strip[0..-2].to_i, 
           :abbr    => {
