@@ -4,7 +4,8 @@ gem 'rails', '3.0.3'
 gem 'bson_ext'
 gem 'SystemTimer'
 gem "mongo_mapper"
-
+gem 'httparty'
+gem 'nokogiri'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
