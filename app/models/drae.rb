@@ -37,7 +37,8 @@ module Drae
     end
 
     def define(word)
-      params = { 'TIPO_BUS' => 3, 'LEMA' => word}
+      @word = word
+      params = { 'TIPO_BUS' => 3, 'LEMA' => @word}
       perform_request(params)
       parse_response(response)
     end
@@ -60,18 +61,57 @@ module Drae
 
     def parse_response(response)
       doc = Nokogiri::HTML(response)
-      container = (doc/:div)
-      { :id        => (container/:a).attribute("name").value.to_i,
-        :word      => container.search(".eLema").first.text,
-        :etymology => process_etymology(container),
-        :meanings  => process_raw_meanings((container/:p)[3, :end]) }
+      
+      returning [] do |lemas|
+        (doc/:div).each do |lema| 
+          lemas << parse_lema(lema)
+        end
+      end
+    end
+    
+    def parse_lema(div)
+      puts div.inner_html
+      meanings  = div.xpath(".//span[@class='eOrdenAcepLema']").map{|span| span.parent}
+      complex   = div.xpath(".//span[@class='eFCompleja']").map{|span| span.parent}
+      etymology = div.xpath(".//span[@class='eEtimo']").first.parent
 
+      #puts "meanings #{meanings.count}"
+      #puts "meanings #{meanings.first.inner_html}"
+      #puts "meanings #{meanings.last.inner_html}"
+      #puts "complex #{complex.count}"
+      #puts "complex #{complex.first.inner_html}"
+      #puts "complex #{complex.last.inner_html}"
+      orig = etymology.text.gsub(%r{</?[^>]+?>}, '')[2..-3]
+      
+      puts orig
+      { 
+        :id        => (div/:a).attribute("name").value.to_i,
+        :word      => div.search(".eLema").first.text,
+        :etymology => {
+                        :original =>etymology.text.gsub(%r{</?[^>]+?>}, '')[2..-3], 
+                        :sources => process_etymology(etymology)
+                      },
+        :meanings  => process_meanings(meanings),
+        :complex   => process_complex_forms(complex_forms) 
+      }
+      
     end
 
-    def process_etymology(container)
-      anchor = container.search(".eEtimo a").first
+    #<span class="eEtimo"> (<a>Del</a> <a title="francés o francesa">fr.</a> <i>chacal</i></span>
+    #<span class="eEtimo">, <a>este del</a> <a>turco</a> <i>çakal</i></span>
+    #<span class="eEtimo">, <a>este del</a> <a>persa</a> <i>šaḡal,</i></span>
+    #<span class="eEtimo"> y este <a>del</a> <a title="sánscrito o sánscrita">sánscr.</a> <i>sṛgâlá</i>).</span>
+    def process_etymology(etymology)
+      returning [] do |sources|
+        etymology.search(".eEtimo").each do |etimo| 
+          lang = etimo.search("a")[1]
+          sources << {:lang => lang['title'] ? lang['title'] : lang.text, :word => etimo.search("i").first.text}
+        end
+      end
 
-      if !anchor.nil?
+      
+      anchor = container.search(".eEtimo a").first
+      unless anchor
         [ anchor.attribute("title").text,
           container.search(".eEtimo i").text]*" "
       else
@@ -79,12 +119,17 @@ module Drae
       end
     end
 
-    def process_raw_meanings(raw_meanings)
-      raw_meanings.collect do |p|
-        { :order   => p.search(".eOrdenAcepLema").text.lstrip.rstrip[0,1].to_i,
-          :abbr    => p.search(".eAbrv")[1].text.lstrip.rstrip,
-          :meaning => p.search(".eAcep").text.lstrip.rstrip }
+    def process_meanings(meanings)
+      meanings.collect do |p|
+        { 
+          :order   => p.search(".eOrdenAcepLema").text.strip[0..-2].to_i, 
+          #:abbr    => abbr.text.strip[0..-2],
+          :meaning => p.search(".eAcep").text.strip 
+        }
       end
+    end
+    def process_complex(complex)
+      
     end
   end
 end
