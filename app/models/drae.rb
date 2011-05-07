@@ -70,20 +70,10 @@ module Drae
     end
     
     def parse_lema(div)
-      puts div.inner_html
       meanings  = div.xpath(".//span[@class='eOrdenAcepLema']").map{|span| span.parent}
       complex   = div.xpath(".//span[@class='eFCompleja']").map{|span| span.parent}
       etymology = div.xpath(".//span[@class='eEtimo']").first.parent
-
-      #puts "meanings #{meanings.count}"
-      #puts "meanings #{meanings.first.inner_html}"
-      #puts "meanings #{meanings.last.inner_html}"
-      #puts "complex #{complex.count}"
-      #puts "complex #{complex.first.inner_html}"
-      #puts "complex #{complex.last.inner_html}"
-      orig = etymology.text.gsub(%r{</?[^>]+?>}, '')[2..-3]
       
-      puts orig
       { 
         :id        => (div/:a).attribute("name").value.to_i,
         :word      => div.search(".eLema").first.text,
@@ -92,7 +82,7 @@ module Drae
                         :sources => process_etymology(etymology)
                       },
         :meanings  => process_meanings(meanings),
-        :complex   => process_complex_forms(complex_forms) 
+        :complex   => process_complex(complex) 
       }
       
     end
@@ -108,23 +98,21 @@ module Drae
           sources << {:lang => lang['title'] ? lang['title'] : lang.text, :word => etimo.search("i").first.text}
         end
       end
-
-      
-      anchor = container.search(".eEtimo a").first
-      unless anchor
-        [ anchor.attribute("title").text,
-          container.search(".eEtimo i").text]*" "
-      else
-        " "
-      end
     end
-
+    #<a name="0_1"></a>
+    #<span class="eOrdenAcepLema"><b> 1.     </b></span>
+    #<span class="eAbrv"> <span class="eAbrv" title="nombre masculino">m.</span></span>
+    #<span class="eAcep"> Mamífero carnívoro de la familia de los Cánidos, de un [...] </span>
     def process_meanings(meanings)
-      meanings.collect do |p|
+      meanings.collect do |meaning|
+        abbr = meaning.search(".eAbrv").first || meaning.search(".eAbrvNoEdit").first
         { 
-          :order   => p.search(".eOrdenAcepLema").text.strip[0..-2].to_i, 
-          #:abbr    => abbr.text.strip[0..-2],
-          :meaning => p.search(".eAcep").text.strip 
+          :order   => meaning.search(".eOrdenAcepLema").text.strip[0..-2].to_i, 
+          :abbr    => {
+                        :abbr => abbr.text,
+                        :extended => abbr['title']
+                      },
+          :meaning => meaning.search(".eAcep").text.strip 
         }
       end
     end
