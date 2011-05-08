@@ -3,7 +3,7 @@ body{
 }
 
 div#content{
-  margin: 80px auto 0px auto;
+  margin: 80px auto 30px auto;
   width: 750px;
 }
 
@@ -16,7 +16,30 @@ div#header{
 div#header div.logo{
   float:left;
   width: 200px;
-  margin: 0 0 0 47px;
+  margin: 0 0 0 48px;
+}
+
+div#header div.searchBox{
+  float: right;
+  margin: 16px 60px 0 0;
+}
+
+
+div#header div.searchBox .miniSearch_fake{
+  background: transparent url('../images/miniSearchBox_bkg.png') no-repeat;
+  width: 249px;
+  height: 38px;
+}
+
+div#header div.searchBox .miniSearch_fake #miniSearch{
+  background: none;
+  border: none;
+  font-family: Helvetica, Arial;
+  color: #747C84;
+  font-size: 17px;
+  width: 223px;
+  height: 22px;
+  margin: 6px 0 0 9px;
 }
 
 div#header div.logo h2 a, div#header div.logo h2 a:visited{
@@ -35,7 +58,7 @@ div.sheet{
 div.sheet div.top{
   background: url('../images/sheet_top.jpg') no-repeat;
   width: 704px;
-  padding: 50px 0 30px 90px;
+  padding: 50px 0 35px 90px;
   float:left;  
 }
 
@@ -43,6 +66,7 @@ div.sheet div.top h1{
   font-family: "Clarendon LT", Times;
   font-size: 35px;
   color: #333333;
+  text-shadow: #FFFFFF 0px 1px 0px;  
 }
 
 div.sheet div.bottom{
@@ -130,10 +154,26 @@ div.ethimology ul li div p.from{
   font-size: 15px;
   color: #9F9D97;
   margin: 0 0 3px 0;
+  text-shadow: #FFFFFF 0px 1px 0px;
 }
 
 div.ethimology ul li div a, div.ethimology ul li div a:visited{
   font-family: Helvetica, Arial;
   font-size: 17px;
   color: #666666;
+}
+
+div#footer{
+  padding: 26px 60px 50px 50px;
+  float:left;
+}
+
+div#footer p, div#footer p a, div#footer p a:visited{
+  font-family: Helvetica, Arial;
+  color: #373B44;
+  font-size: 17px;
+  font-weight: bold;
+  text-align: left;
+  line-height: 22px;
+  text-shadow: #6B7986 0px 1px 0px;
 }
