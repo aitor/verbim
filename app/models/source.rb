@@ -1,7 +1,7 @@
 class Source
   include MongoMapper::Document
 
-  key :kind, String
+  key :lang, String
   key :word, String
 
   belongs_to :etymology

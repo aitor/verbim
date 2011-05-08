@@ -1,1 +1,45 @@
-<%= @word.name %>
+<% for lema in @word.lemas %>
+
+  <h1><%= lema.name %></h1>
+  <% for meaning in lema.meanings %>
+    <div class="meaning">
+      <p><%= meaning.definition %></p>
+      <ul>
+        <% for abbr in meaning.abbreviations %>
+          <li class="first"><%= abbr.extended %></li>
+        <% end %>
+        <li><a href="#">ejemplos de uso</a></li>
+        <li><a href="#"class="pics">fotos</a></li>
+      </ul>
+    </div>
+  <% end %>
+  <% for complex in lema.complexes %>
+    <div class="form_meaning">
+      <p class="form_title"><%= complex.figure %></p>
+      <% f = complex.meanings.first %>
+      <p><%= f.definition %></p>
+      <ul>
+        <li class="first"><%= f.abbreviations.first.extended %></li>
+        <li><a href="#">ejemplos de uso</a></li>
+        <li><a href="#"class="pics">fotos</a></li>
+      </ul>
+    </div>
+  <% end %>
+  <% if lema.etymology %>
+    <hr/>
+    <div class="ethimology">
+      <ul>
+        <% for source in lema.etymology.sources %>
+          <li>
+            <div>
+              <p class="from"><%= source.lang %></p>
+              <a href="#"><%= source.word %></a>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </div>  
+  <% end %>
+  
+<% end %>
+

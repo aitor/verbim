@@ -2,28 +2,29 @@ require 'progress_bar'
 
 module SupportFunctions
   FILE_NAME = "data/spanish-lemario-20101017.txt"
-  URL = "http://buscon.rae.es/draeI/SrvltGUIBusUsual?TIPO_BUS=3&LEMA="
 
-  def self.scrap!
+  def self.scrap!(force=false)
+    
     lines = File.readlines(FILE_NAME)
     bar = ProgressBar.new(lines.size)
-
+    
+    last_word_indexed = Word.sort(:name).last
     lines.each do |line|
+      puts ("Processing #{line}")
       w = line.strip
       begin
         Drae::API.new.define(w)
-        error = Error.find_by_word(w)
-        error.destroy if error
       rescue Exception=>e
-        error = Error.find_by_word(w)
-        if error
-          error.message = (e.message + "\n" + e.backtrace.join("\n"))
-          error.save
-        else
-          Error.create(:word => w, :message => (e.message + "\n" + e.backtrace.join("\n")))
-        end
+        error(e.message + "\n" + e.backtrace.join("\n"))
       end
       bar.increment!
     end
+    
+  end
+  def self.error(msg)
+    log(msg, "ERROR")
+  end
+  def self.log(msg, type="DEBUG")
+    Log.create(:type => type, :message => msg)
   end
 end

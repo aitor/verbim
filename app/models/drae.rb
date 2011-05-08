@@ -36,7 +36,7 @@ module Drae
       end
     end
 
-    def define(word)
+    def create_word(word)
       @word = word
       params = { 'TIPO_BUS' => 3, 'LEMA' => @word}
       perform_request(params)
