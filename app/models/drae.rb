@@ -72,15 +72,22 @@ module Drae
     def parse_lema(div)
       meanings  = div.xpath(".//span[@class='eOrdenAcepLema']").map{|span| span.parent}
       complex   = div.xpath(".//span[@class='eFCompleja']").map{|span| span.parent}
-      etymology = div.xpath(".//span[@class='eEtimo']").first.parent
+
+      etymology = div.xpath(".//span[@class='eEtimo']").first
+
+      ety_info = if etymology
+        {
+          :original =>etymology.parent.text.strip.gsub(%r{</?[^>]+?>}, '')[1..-3], 
+          :sources => process_etymology(etymology.parent)
+        }
+      else
+        {}
+      end
       
       { 
         :id        => (div/:a).attribute("name").value.to_i,
         :word      => div.search(".eLema").first.text,
-        :etymology => {
-                        :original =>etymology.text.strip.gsub(%r{</?[^>]+?>}, '')[1..-3], 
-                        :sources => process_etymology(etymology)
-                      },
+        :etymology => ety_info,
         :meanings  => process_meanings(meanings),
         :complex   => process_complex(complex) 
       }
@@ -96,8 +103,15 @@ module Drae
     def process_etymology(etymology)
       returning [] do |sources|
         etymology.search(".eEtimo").each do |etimo| 
+          puts "etimo #{etimo}"
+          word = etimo.search("i").first && etimo.search("i").first.text
           lang = etimo.search("a").last
-          sources << {:lang => lang['title'] ? lang['title'] : lang.text, :word => etimo.search("i").first.text}
+          lng = if lang
+            lang['title'] ? lang['title'] : lang.text
+          else
+            nil
+          end
+          sources << {:lang => lng, :word => word}
         end
       end
     end
@@ -122,8 +136,41 @@ module Drae
         }
       end
     end
+    
+    #<p style="margin-left:0em; margin-bottom:-0.5em">
+    #  <a name="estar_algo_como_un_dado." id="estar_algo_como_un_dado."></a> <span class="eFCompleja"><b>estar</b> algo <b>como un</b> <b>~</b><b>.</b></span>
+    #</p>
     def process_complex(complex)
-      
+      complex.collect do |c|
+        {
+          :figure => c.search(".eFCompleja").text,
+          :meanings => process_complex_meanings(c)
+        }
+      end
     end
+    
+    #<p style="margin-left:2em; margin-bottom:-0.5em">
+    #  <a name="estar_algo_como_un_dado.1" id="estar_algo_como_un_dado.1"></a> <span class="eOrdenAcepFC"><b>1.</b></span> <span class="eAbrv"><span class="eAbrv" title="locución verbal">loc. verb.</span></span> <span class="eAcep">Estar bien ajustado y arreglado.</span>
+    #</p>
+    def process_complex_meanings(c)
+      name_attr = c.search("a").first['name']
+      meanings = c.parent.xpath(".//a[starts-with(@name, '#{name_attr}')]").map{|span| span.parent}
+      returning [] do |m|
+        meanings.each do |mean| 
+          unless mean == c
+            abbr = mean.search(".eAbrv .eAbrv").first || mean.search(".eAbrvNoEdit .eAbrvNoEdit").first
+            m <<  {
+                    :order   => mean.search(".eOrdenAcepFC").text.strip[0..-2].to_i,
+                    :abbr    => {
+                                  :abbr => abbr.text,
+                                  :extended => abbr['title']
+                                },
+                    :meaning => mean.search(".eAcep").text.strip 
+                  }
+          end
+        end
+      end
+    end
+    
   end
 end
