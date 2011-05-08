@@ -12,6 +12,8 @@ module SupportFunctions
       w = line.strip
       begin
         Drae::API.new.define(w)
+        error = Error.find_by_word(w)
+        error.destroy if error
       rescue Exception=>e
         error = Error.find_by_word(w)
         if error
