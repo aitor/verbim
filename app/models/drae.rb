@@ -103,7 +103,6 @@ module Drae
     def process_etymology(etymology)
       returning [] do |sources|
         etymology.search(".eEtimo").each do |etimo| 
-          puts "etimo #{etimo}"
           word = etimo.search("i").first && etimo.search("i").first.text
           lang = etimo.search("a").last
           lng = if lang
