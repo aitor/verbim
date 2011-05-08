@@ -13,7 +13,7 @@ module SupportFunctions
       puts ("Processing #{line}")
       w = line.strip
       begin
-        Drae::API.new.define(w)
+        Word.create_from_definition w
       rescue Exception=>e
         error(e.message + "\n" + e.backtrace.join("\n"))
       end
