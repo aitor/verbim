@@ -1,0 +1,139 @@
+body{
+  background: url('../images/bkg.jpg') repeat;
+}
+
+div#content{
+  margin: 80px auto 0px auto;
+  width: 750px;
+}
+
+div#header{
+  background: url('../images/bkg_header.jpg') no-repeat;
+  width: 750px;
+  height:69px;  
+}
+
+div#header div.logo{
+  float:left;
+  width: 200px;
+  margin: 0 0 0 47px;
+}
+
+div#header div.logo h2 a, div#header div.logo h2 a:visited{
+  font-family: Helvetica, Arial;
+  color: #F4F2E7;
+  font-size: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  line-height: 69px;
+}
+
+div.sheet{
+  float:left;
+}
+
+div.sheet div.top{
+  background: url('../images/sheet_top.jpg') no-repeat;
+  width: 704px;
+  padding: 50px 0 30px 90px;
+  float:left;  
+}
+
+div.sheet div.top h1{
+  font-family: "Clarendon LT", Times;
+  font-size: 35px;
+  color: #333333;
+}
+
+div.sheet div.bottom{
+  background: url('../images/sheet_bottom.jpg') no-repeat;
+  width: 704px;
+  height: 25px;
+  float:left;  
+}
+
+
+
+div.meaning{
+  background: transparent url('../images/meaning_line.jpg') 1px 13px no-repeat;
+  margin: 25px 0 0 0;
+  float:left;
+}
+
+div.meaning p, div.form_meaning p{
+  font-family: Helvetica, Arial;
+  color: #666666;
+  font-size: 17px;
+  margin: 0 0 0 18px;
+  font-weight: normal;
+  width: 533px;
+}
+
+div.meaning ul, div.form_meaning ul{
+  margin: 8px 0 0 0;
+  padding: 0 0 0 17px;
+}
+
+div.meaning ul li, div.form_meaning ul li{
+  background: transparent url('../images/list_bullet.png') 0 7px no-repeat;
+  padding: 0 0 0 8px;
+  display: inline;
+  font-family: Helvetica, Arial;
+  font-size: 13px;
+  color: #9f9397;
+}
+
+div.meaning ul li.first, div.form_meaning ul li.first{
+  background: transparent;
+  padding: 0;
+}
+
+div.meaning ul li a, div.meaning ul li a:visited, div.form_meaning ul li a, div.form_meaning ul li a:visited {
+  font-family: Helvetica, Arial;
+  font-size: 13px;
+  color: #ff6600;
+}
+
+div.form_meaning {
+  background: transparent url('../images/form_meaning_line.png') 1px 15px no-repeat;
+  margin: 25px 0 0 0;
+  float:left;
+}
+
+div.form_meaning p.form_title{
+  font-family: "Clarendon LT", Times;
+  font-size: 21px;
+  color: #333333;
+  margin: 0 0 5px 18px;
+}
+
+div.sheet div.top hr{
+  color: #c4c2ba;
+  width: 560px;
+  margin: 29px 0 2px 0;
+  float:left;
+}
+
+div.ethimology{
+  float:left;
+  width: 558px;
+}
+
+div.ethimology ul li{
+  display:inline;
+  width: 160px;
+  float:left;
+  margin: 24px 10px 0 16px;
+}
+
+div.ethimology ul li div p.from{
+  font-size: 15px;
+  color: #9F9D97;
+  margin: 0 0 3px 0;
+}
+
+div.ethimology ul li div a, div.ethimology ul li div a:visited{
+  font-family: Helvetica, Arial;
+  font-size: 17px;
+  color: #666666;
+}
