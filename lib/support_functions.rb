@@ -6,18 +6,18 @@ module SupportFunctions
   def self.scrap!(force=false)
     
     lines = File.readlines(FILE_NAME)
-    bar = ProgressBar.new(lines.size)
+    #bar = ProgressBar.new(lines.size)
     
     last_word_indexed = Word.sort(:name).last
     lines.each do |line|
-      puts ("Processing #{line}")
+      log ("Processing #{line}")
       w = line.strip
       begin
         Word.create_from_definition w
       rescue Exception=>e
         error(e.message + "\n" + e.backtrace.join("\n"))
       end
-      bar.increment!
+      #bar.increment!
     end
     
   end
