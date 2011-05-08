@@ -8,5 +8,14 @@ class WordsController < ApplicationController
       format.json  { render :json => @word.to_json(:except => :html) }
     end
   end
+  
+  def search
+    @word = Word.find_by_name params[:search][:word]
+    if @word
+      redirect_to word_path(@word.name)
+    else
+      redirect_to root_path
+    end
+  end
 
 end
