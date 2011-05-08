@@ -1635,7 +1635,6 @@ acundangarse
 acuntir
 acuosidad
 acuoso
-acupear
 acupuntor
 acupuntura
 acupunturista
@@ -2322,7 +2321,6 @@ aflato
 aflautado
 aflautar
 aflechado
-aflechate
 afletar
 aflicción
 aflictivo
@@ -6119,7 +6117,6 @@ angaripola
 ángaro
 angazo
 ángel
-Ángela
 angélica
 angelical
 angelicalmente
@@ -21289,7 +21286,6 @@ cloral
 clorar
 cloratado
 clorato
-clorformar
 clorhidrato
 clorhídrico
 clórico
@@ -26459,7 +26455,6 @@ daltónico
 daltonismo
 dama
 damaceno
-damacuaco
 damajuana
 damajuao
 damasana
@@ -34376,7 +34371,6 @@ enfirolar
 enfisema
 enfisematoso
 enfistolar
-enfistolarse
 enfiteusis
 enfiteuta
 enfiteutecario
@@ -65026,7 +65020,6 @@ pipilacha
 pipiola
 pipiolera
 pipiolo
-pipiricho
 pipiricojo
 pipirigallo
 pipirigaña
@@ -65103,6 +65096,7 @@ pirineísta
 pirineo
 pirinola
 piripi
+piripicho
 pirita
 piritoso
 pirla
@@ -66246,7 +66240,6 @@ porfiador
 porfiar
 porfídico
 pórfido
-porfina
 porfioso
 porfirina
 porfirizar
