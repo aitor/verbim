@@ -10,20 +10,34 @@
   <div id="content">
     <div id="header">
       <div class="logo">
-        <h2><a href="#">verbim.com</a></h2>
+        <h2><%= link_to "verbim.com", root_path %></h2>
       </div>
       <div class="searchBox">
         <div class="miniSearch_fake">
-          <input id="miniSearch" type="text" placeholder="Busca una palabra..."/>
+          <% form_for :search, :url => search_words_path do |f| %>
+            <%= f.text_field :word, :id=> "miniSearch", :placeholder => "Busca una palabra..." %>
+          <% end %>
+        </div>
+      </div>
+      
+      <div class="sheet">
+        <div class="top">
+          <%= yield %>
+          <% unless @word %>
+            <div class="search_fake">
+              <% form_for :search, :url => search_words_path do |f| %>
+                <%= f.text_field :word, :id=> "miniSearch", :class=> "search", :placeholder => "Busca una palabra..." %>
+                <%= f.submit :class=>"searchButton", :value => "Buscar" %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+        <div class="bottom">
         </div>
       </div>
     </div>
-    <div class="sheet">
-      <div class="top">
-        <%= yield %>
-      </div>
-      <div class="bottom">
-      </div>
+    <div id="footer">
+      <p>En realidad, la parte bonita de todo esto es la <a href="#">API para desarrolladores</a> que hay por detrás y lo que aún no hemos podido hacer.</p>
     </div>
   </div>
 </body>
